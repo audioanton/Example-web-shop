@@ -1,12 +1,12 @@
 // localStorage.clear();
 
 if (!localStorage.getItem("products")) fetchProducts();
-
-const parsedProducts = JSON.parse(localStorage.getItem("products"));
-drawProducts(parsedProducts);
+else {
+  drawProducts(JSON.parse(localStorage.getItem("products")));
+}
 
 if (localStorage.getItem("cart")) {
-  renderCart(parsedProducts);
+  renderCart(JSON.parse(localStorage.getItem("products")));
 }
 
 function drawProducts(products) {
@@ -21,10 +21,12 @@ function fetchProducts() {
     .then((response) => response.json())
     .then((data) => {
       localStorage.setItem("products", JSON.stringify(data));
+      drawProducts(data);
     });
 }
 
 function getCartProduct(product, amountInCart) {
+  
   const rowId = `product_${product.id}`;
   const row = document.createElement("row");
   row.classList.add("row", "mb-3");
@@ -79,8 +81,7 @@ function getCartProduct(product, amountInCart) {
   plusButton.classList.add("btn", "btn-outline-secondary", "btn-sm");
   plusButton.textContent = "+";
   plusButton.addEventListener("click", function () {
-    incrementProduct(product, amount);
-    // amount.value = Number(amount.value) + 1;
+    incrementProduct(product.id, amount);
     updatePrice(row);
   });
 
@@ -194,37 +195,34 @@ function isProductInCart(product, cart) {
 
 function addToCart(product) {
   const cart = JSON.parse(localStorage.getItem("cart"));
-  if (isProductInCart(product, cart)) {
+
+  if (cart) {
+    if (isProductInCart(product, cart)) {
       const amountElement = document.getElementById(`product_${product.id}`).querySelector("input");
       incrementProduct(product.id, amountElement);
-  } else {
-      if (cart) {
-        cart[product.id] = 1;
-        localStorage.setItem("cart", JSON.stringify(cart));  
-      } else {
-        const newCart = {
-        [`${product.id}`]: 1,
-        };
-        localStorage.setItem("cart", JSON.stringify(newCart));
-      }
+    } else {
+      cart[product.id] = 1;
+      localStorage.setItem("cart", JSON.stringify(cart));
+      const cartProduct = getCartProduct(product, 1);
+      document.getElementById("cart-container").append(cartProduct);
+    }
+  } 
+  else {
+      const newCart = {
+        [`${product.id}`]: 1
+      };
+      localStorage.setItem("cart", JSON.stringify(newCart));
       const cartProduct = getCartProduct(product, 1);
       document.getElementById("cart-container").append(cartProduct);
   }   
 }
 
 function incrementProduct(product_id, amountElement) {
-  amountElement.value = Number(amountElement.value) +1;
+  amountElement.value = Number(amountElement.value) + 1;
 
-
-  // const cart = localStorage.getItem("cart");
-  // if (cart) {
-  //   const json = JSON.parse(cart);
-  //   if (json[`${product.id}`]) json[`${product.id}`] += 1;
-  //   else json[`${product.id}`] = 1;
-  //   localStorage.setItem("cart", JSON.stringify(json));
-  // } else {
-    
-  // }
+  const cart = JSON.parse(localStorage.getItem("cart"));
+  cart[product_id] = amountElement.value;
+  localStorage.setItem("cart", JSON.stringify(cart));
 }
 
 function decrementProduct(product_id) {
