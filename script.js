@@ -1,9 +1,10 @@
-// localStorage.clear();
+localStorage.clear();
 
 if (!localStorage.getItem("products")) fetchProducts();
-
-const parsedProducts = JSON.parse(localStorage.getItem("products"));
-drawProducts(parsedProducts);
+else {
+  const parsedProducts = JSON.parse(localStorage.getItem("products"));
+  drawProducts(parsedProducts);
+}
 
 if (localStorage.getItem("cart")) {
   renderCart(parsedProducts);
@@ -21,10 +22,13 @@ function fetchProducts() {
     .then((response) => response.json())
     .then((data) => {
       localStorage.setItem("products", JSON.stringify(data));
+      drawProducts(data);
     });
 }
 
 function getCartProduct(product, amountInCart) {
+  console.log(product + " " + amountInCart);
+
   const rowId = `product_${product.id}`;
   const row = document.createElement("row");
   row.classList.add("row", "mb-3");
@@ -194,27 +198,31 @@ function isProductInCart(product, cart) {
 
 function addToCart(product) {
   const cart = JSON.parse(localStorage.getItem("cart"));
-  if (isProductInCart(product, cart)) {
-      const amountElement = document.getElementById(`product_${product.id}`).querySelector("input");
-      incrementProduct(product.id, amountElement);
+
+  if (cart) {
+    if (isProductInCart(product, cart)) {
+        const amountElement = document.getElementById(`product_${product.id}`).querySelector("input");
+        incrementProduct(product.id, amountElement);
+    } else {
+      cart[product.id] = 1;
+      localStorage.setItem("cart", JSON.stringify(cart));
+    }
   } else {
-      if (cart) {
-        cart[product.id] = 1;
-        localStorage.setItem("cart", JSON.stringify(cart));  
-      } else {
-        const newCart = {
+      const newCart = {
         [`${product.id}`]: 1,
-        };
-        localStorage.setItem("cart", JSON.stringify(newCart));
-      }
+      };
+      localStorage.setItem("cart", newCart);
       const cartProduct = getCartProduct(product, 1);
       document.getElementById("cart-container").append(cartProduct);
   }   
 }
 
 function incrementProduct(product_id, amountElement) {
-  amountElement.value = Number(amountElement.value) +1;
+  amountElement.value = Number(amountElement.value) + 1;
 
+  const cart = JSON.parse(localStorage.getItem("cart"));
+  cart[product_id] = amountElement.value;
+  localStorage.setItem("cart", JSON.stringify(cart));
 
   // const cart = localStorage.getItem("cart");
   // if (cart) {
