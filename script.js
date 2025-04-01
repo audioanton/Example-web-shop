@@ -64,6 +64,13 @@ function getCartProduct(product, amountInCart) {
   );
   amount.setAttribute("value", amountInCart);
 
+  const priceDiv = document.createElement("div");
+  priceDiv.classList.add("col-md-3", "text-center");
+
+  const price = document.createElement("p");
+  price.classList.add("fw-bold");
+  updatePrice(price, amount.value, product.price);
+
   const minusButton = document.createElement("button");
   minusButton.setAttribute("type", "button");
   minusButton.classList.add("btn", "btn-outline-secondary", "btn-sm");
@@ -71,7 +78,7 @@ function getCartProduct(product, amountInCart) {
   minusButton.addEventListener("click", function () {
       if (amount.value - 1 >= 0) {
         decrementProduct(product.id, amount);
-        updatePrice(row);
+        updatePrice(price, amount.value, product.price);
       }
   });
 
@@ -81,18 +88,13 @@ function getCartProduct(product, amountInCart) {
   plusButton.textContent = "+";
   plusButton.addEventListener("click", function () {
     incrementProduct(product.id, amount);
-    updatePrice(row);
+    updatePrice(price, amount.value, product.price);
   });
 
   inputDiv.append(minusButton, amount, plusButton);
   amountDiv.append(inputDiv);
 
-  const priceDiv = document.createElement("div");
-  priceDiv.classList.add("col-md-3", "text-center");
-
-  const price = document.createElement("p");
-  price.classList.add("fw-bold");
-  price.textContent = `$${product.price}`;
+  
 
   const removeButton = document.createElement("button");
   removeButton.classList.add("btn", "btn-outline-danger", "btn-sm");
@@ -233,11 +235,11 @@ function decrementProduct(product_id, amountElement) {
 }
 
 function removeProduct(product_id) {
-  // only for localStorage
+  
 }
 
-function updatePrice(row) {
-  // update gui for row in modal price * amount
+function updatePrice(priceElement, amount, priceNumber) {
+  priceElement.textContent = `$${priceNumber * Number(amount)}`;
   updateTotalPrice();
 }
 
