@@ -69,11 +69,10 @@ function getCartProduct(product, amountInCart) {
   minusButton.classList.add("btn", "btn-outline-secondary", "btn-sm");
   minusButton.textContent = "-";
   minusButton.addEventListener("click", function () {
-    // decrementProduct(product);
-    if (amount.value > 0) {
-      amount.value -= 1;
-      updatePrice(row);
-    }
+      if (amount.value - 1 >= 0) {
+        decrementProduct(product.id, amount);
+        updatePrice(row);
+      }
   });
 
   const plusButton = document.createElement("button");
@@ -225,8 +224,12 @@ function incrementProduct(product_id, amountElement) {
   localStorage.setItem("cart", JSON.stringify(cart));
 }
 
-function decrementProduct(product_id) {
-  // only for localStorage
+function decrementProduct(product_id, amountElement) {
+  amountElement.value -= 1;
+
+  const cart = JSON.parse(localStorage.getItem("cart"));
+  cart[product_id] = amountElement.value;
+  localStorage.setItem("cart", JSON.stringify(cart));
 }
 
 function removeProduct(product_id) {
