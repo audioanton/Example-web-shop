@@ -241,12 +241,20 @@ function removeProduct(product_id) {
 }
 
 function updatePrice(priceElement, amount, priceNumber) {
-  priceElement.textContent = `$${priceNumber * Number(amount)}`;
+  const price = (priceNumber * Number(amount)).toFixed(2);
+  priceElement.textContent = `$${price}`;
   updateTotalPrice();
 }
 
 function updateTotalPrice() {
-  // get modal by Id, sum totals, update total
+  const customerCart = document.getElementById("cart-container");
+  let sum = 0;
+  for (const product of customerCart.children) {
+    const currentPrice = product.querySelector("p").textContent.substring(1);
+    sum += Number(currentPrice);
+  }
+  const formatted = sum.toFixed(2);
+  document.getElementById("total").textContent = `Total: $${formatted}`;
 }
 
 function renderCart(products) {
