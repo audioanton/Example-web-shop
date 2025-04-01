@@ -115,7 +115,7 @@ function getProductCard(product) {
   column.classList.add("col");
 
   const card = document.createElement("div");
-  card.classList.add("card", "m-3", "h-100");
+  card.classList.add("card", "m-3");
   card.setAttribute("style", "width: 18rem;");
 
   const img = document.createElement("img");
