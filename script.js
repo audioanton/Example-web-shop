@@ -246,6 +246,21 @@ function updatePrice(priceElement, amount, priceNumber) {
 }
 
 function updateTotalPrice() {
+  const customerCart = document.getElementById("cart-container");
+  let sum = 0;
+  // const sum = myElement.children.reduce( (accumulator, child) => {
+  //   const price = child.querySelector("p").textContent;
+  //   accumulator + Number(price.substring(1))
+  //   console.log(accumulator);
+  //   }
+  // );
+  for (const product of customerCart.children) {
+    const currentPrice = product.querySelector("p").textContent.substring(1);
+    sum += Number(currentPrice);
+  }
+  const formatted = sum.toFixed(2);
+  document.getElementById("total").textContent = `Total: $${formatted}`;
+
   // get modal by Id, sum totals, update total
 }
 
