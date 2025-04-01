@@ -100,7 +100,7 @@ function getCartProduct(product, amountInCart) {
   removeButton.classList.add("btn", "btn-outline-danger", "btn-sm");
   removeButton.textContent = "Remove";
   removeButton.addEventListener("click", function () {
-    // removeProduct(product);
+    removeProduct(product.id);
     row.remove();
     updateTotalPrice();
   });
@@ -235,7 +235,9 @@ function decrementProduct(product_id, amountElement) {
 }
 
 function removeProduct(product_id) {
-  
+  const cart = JSON.parse(localStorage.getItem("cart"));
+  delete cart[product_id];
+  localStorage.setItem("cart", JSON.stringify(cart));
 }
 
 function updatePrice(priceElement, amount, priceNumber) {
