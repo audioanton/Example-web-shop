@@ -87,8 +87,8 @@ function getCartProduct(product, amountInCart) {
   plusButton.classList.add("btn", "btn-outline-secondary", "btn-sm");
   plusButton.textContent = "+";
   plusButton.addEventListener("click", function () {
-    incrementProduct(product.id, amount);
-    updatePrice(price, amount.value, product.price);
+    incrementProduct(product, amount, price); // add price, göra om product.id till product
+    // updatePrice(price, amount.value, product.price);
   });
 
   inputDiv.append(minusButton, amount, plusButton);
@@ -198,13 +198,10 @@ function addToCart(product) {
   const cart = JSON.parse(localStorage.getItem("cart"));
 
   if (cart) {
-    if (isProductInCart(product, cart)) {
-      const amountElement = document.getElementById(`product_${product.id}`).querySelector("input");
-      incrementProduct(product.id, amountElement);
-    } else {
+    if (!isProductInCart(product, cart)) {
       cart[product.id] = 1;
       localStorage.setItem("cart", JSON.stringify(cart));
-      const cartProduct = getCartProduct(product, 1);
+      const cartProduct = getCartProduct(product, 0);
       document.getElementById("cart-container").append(cartProduct);
     }
   } 
@@ -213,17 +210,27 @@ function addToCart(product) {
         [`${product.id}`]: 1
       };
       localStorage.setItem("cart", JSON.stringify(newCart));
-      const cartProduct = getCartProduct(product, 1);
+      const cartProduct = getCartProduct(product, 0);
       document.getElementById("cart-container").append(cartProduct);
-  }   
+  }
+  const amountElement = document.getElementById(`product_${product.id}`).querySelector("input");
+  const priceElement = document.getElementById(`product_${product.id}`).querySelector("p");
+  incrementProduct(product, amountElement, priceElement);
+  // updatePrice();
+  // updateTotalPrice();   
 }
 
-function incrementProduct(product_id, amountElement) {
+function incrementProduct(product, amountElement, priceElement) { // lägga till produkten istället
+  console.log("here");
   amountElement.value = Number(amountElement.value) + 1;
 
+
   const cart = JSON.parse(localStorage.getItem("cart"));
-  cart[product_id] = amountElement.value;
+  cart[product.id] = amountElement.value;
   localStorage.setItem("cart", JSON.stringify(cart));
+
+  // kalla på updatePrice()
+  updatePrice(priceElement, amountElement.value, product.price);
 }
 
 function decrementProduct(product_id, amountElement) {
@@ -260,10 +267,19 @@ function updateTotalPrice() {
 function renderCart(products) {
   const jsonCart = JSON.parse(localStorage.getItem("cart"));
 
-  Object.entries(jsonCart).forEach((entry) => {
-    const product = products.find(({ id }) => id === Number(entry[0]));
-    document
-      .getElementById("cart-container")
-      .append(getCartProduct(product, entry[1]));
-  });
+  if (jsonCart) {
+    Object.entries(jsonCart).forEach((entry) => {
+      const product = products.find(({ id }) => id === Number(entry[0]));
+      document
+        .getElementById("cart-container")
+        .append(getCartProduct(product, entry[1]));
+    });
+    updateTotalPrice();
+  }
+}
+
+function clearCart() {
+  localStorage.removeItem("cart");
+  document.getElementById("cart-container").replaceChildren();
+  updateTotalPrice();
 }
