@@ -62,21 +62,29 @@
               <div class="col">
                 <div class="cart-summary">
                   <div class="d-flex justify-content-start">
-                    <h5 class="total-price" id="total"></h5>
+                    <h5 class="total-price" id="total">Total: $0</h5>
                   </div>
                 </div>
               </div>
               <button
                 type="button"
-                class="btn btn-secondary"
+                class="btn btn-danger col-lg-2"
+                onclick="clearCart()"
+              >
+                Clear Cart
+              </button>
+              <button
+                type="button"
+                class="btn btn-secondary col-lg-2"
                 data-bs-dismiss="modal"
               >
-                Close Cart
+                Close
               </button>
               <button
                 type="button"
                 id="cartPurchaseButton"
-                class="btn btn-primary"
+                class="btn btn-primary col-lg-2"
+                data-bs-dismiss="modal"
               >
                 Purchase
               </button>
@@ -88,6 +96,7 @@
         id="main-row"
         class="col-12 row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4"
       ></div>
+      <div id="alertDiv" class="sticky-bottom py-5"></div>
     </div>
     <script src="script.js"></script>
   </body>
