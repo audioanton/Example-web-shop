@@ -279,7 +279,7 @@ function clearCart() {
   updateTotalPrice();
 }
 
-const alertDiv = document.getElementById('alertDiv')
+const alertDiv = document.getElementById('alertDiv');
 
 const appendAlert = (message, type) => {
   const wrapper = document.createElement('div')
@@ -292,10 +292,11 @@ const appendAlert = (message, type) => {
   alertDiv.replaceChildren(wrapper);
 }
 
-const purchaseButton = document.getElementById('cartPurchaseButton')
+const purchaseButton = document.getElementById('cartPurchaseButton');
 if (purchaseButton) {
   purchaseButton.addEventListener('click', () => {
-    appendAlert('Thank you for your purchase!', 'success')
+    appendAlert('Thank you for your purchase!', 'success');
+    clearCart();
   })
 }
 
