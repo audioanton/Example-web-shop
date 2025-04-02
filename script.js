@@ -279,7 +279,7 @@ function clearCart() {
   updateTotalPrice();
 }
 
-const alertPlaceholder = document.getElementById('alertDiv')
+const alertDiv = document.getElementById('alertDiv')
 
 const appendAlert = (message, type) => {
   const wrapper = document.createElement('div')
@@ -289,7 +289,7 @@ const appendAlert = (message, type) => {
     '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
     '</div>'
   ].join('')
-  alertPlaceholder.append(wrapper)
+  alertDiv.replaceChildren(wrapper);
 }
 
 const purchaseButton = document.getElementById('cartPurchaseButton')
