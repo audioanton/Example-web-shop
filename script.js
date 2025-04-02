@@ -1,5 +1,3 @@
-// localStorage.clear();
-
 if (!localStorage.getItem("products")) fetchProducts();
 else {
   drawProducts(JSON.parse(localStorage.getItem("products")));
@@ -87,8 +85,7 @@ function getCartProduct(product, amountInCart) {
   plusButton.classList.add("btn", "btn-outline-secondary", "btn-sm");
   plusButton.textContent = "+";
   plusButton.addEventListener("click", function () {
-    incrementProduct(product, amount, price); // add price, göra om product.id till product
-    // updatePrice(price, amount.value, product.price);
+    incrementProduct(product, amount, price);
   });
 
   inputDiv.append(minusButton, amount, plusButton);
@@ -157,6 +154,7 @@ function getProductCard(product) {
   addToCartBtn.textContent = "Add To Cart";
   addToCartBtn.addEventListener("click", () => {
     addToCart(product);
+    appendAlert('Added to cart', 'primary');
   });
 
   about.addEventListener("click", function () {
@@ -216,11 +214,9 @@ function addToCart(product) {
   const amountElement = document.getElementById(`product_${product.id}`).querySelector("input");
   const priceElement = document.getElementById(`product_${product.id}`).querySelector("p");
   incrementProduct(product, amountElement, priceElement);
-  // updatePrice();
-  // updateTotalPrice();   
 }
 
-function incrementProduct(product, amountElement, priceElement) { // lägga till produkten istället
+function incrementProduct(product, amountElement, priceElement) {
   console.log("here");
   amountElement.value = Number(amountElement.value) + 1;
 
@@ -229,7 +225,6 @@ function incrementProduct(product, amountElement, priceElement) { // lägga till
   cart[product.id] = amountElement.value;
   localStorage.setItem("cart", JSON.stringify(cart));
 
-  // kalla på updatePrice()
   updatePrice(priceElement, amountElement.value, product.price);
 }
 
@@ -283,3 +278,24 @@ function clearCart() {
   document.getElementById("cart-container").replaceChildren();
   updateTotalPrice();
 }
+
+const alertPlaceholder = document.getElementById('alertDiv')
+
+const appendAlert = (message, type) => {
+  const wrapper = document.createElement('div')
+  wrapper.innerHTML = [
+    `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+    `   <div>${message}</div>`,
+    '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+    '</div>'
+  ].join('')
+  alertPlaceholder.append(wrapper)
+}
+
+const purchaseButton = document.getElementById('cartPurchaseButton')
+if (purchaseButton) {
+  purchaseButton.addEventListener('click', () => {
+    appendAlert('Thank you for your purchase!', 'success')
+  })
+}
+
