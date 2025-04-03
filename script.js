@@ -113,8 +113,7 @@ function getProductCard(product) {
   column.classList.add("col");
 
   const card = document.createElement("div");
-  card.classList.add("card", "m-3");
-  card.setAttribute("style", "width: 18rem;");
+  card.classList.add("card");
 
   const img = document.createElement("img");
   img.setAttribute("src", product.image);
@@ -217,7 +216,6 @@ function addToCart(product) {
 }
 
 function incrementProduct(product, amountElement, priceElement) {
-  console.log("here");
   amountElement.value = Number(amountElement.value) + 1;
 
 

@@ -25,13 +25,14 @@
         max-height: 0;
         transition: max-height 0.2s ease-out;
       }
+      .centered {
+        margin: auto;
+      }
     </style>
   </head>
-  <body>
-    <div class="main container">
-      <header
-        class="d-flex justify-content-between px-1 py-3 bg-white sticky-top"
-      >
+  <body class="vh-100 vw-100">
+    <div class="container d-flex-column">
+      <header class="d-flex justify-content-around py-3 bg-white sticky-top">
         <h1>My Shop</h1>
         <button
           type="button"
@@ -42,13 +43,11 @@
           Shopping Cart
         </button>
       </header>
-
       <div
         class="modal fade"
         id="cartModal"
         tabindex="-1"
         aria-labelledby="cartModalLabel"
-        aria-hidden="true"
       >
         <div class="modal-dialog modal-dialog-centered modal-lg">
           <div class="modal-content">
@@ -58,45 +57,46 @@
             <div class="modal-body">
               <div class="container" id="cart-container"></div>
             </div>
-            <div class="modal-footer d-flex justify-content-between">
-              <div class="col">
-                <div class="cart-summary">
-                  <div class="d-flex justify-content-start">
-                    <h5 class="total-price" id="total">Total: $0</h5>
-                  </div>
-                </div>
+            <div class="row modal-footer d-flex-row justify-content-between">
+              <!-- <div class="col-12 cart-summary"> -->
+              <div class="col-12 d-flex justify-content-start">
+                <h5 class="total-price" id="total">Total: $0</h5>
               </div>
-              <button
-                type="button"
-                class="btn btn-danger col-lg-2"
-                onclick="clearCart()"
-              >
-                Clear Cart
-              </button>
-              <button
-                type="button"
-                class="btn btn-secondary col-lg-2"
-                data-bs-dismiss="modal"
-              >
-                Close
-              </button>
-              <button
-                type="button"
-                id="cartPurchaseButton"
-                class="btn btn-primary col-lg-2"
-                data-bs-dismiss="modal"
-              >
-                Purchase
-              </button>
+              <div class="col-12">
+                <button
+                  type="button"
+                  class="btn btn-danger col-md-3"
+                  onclick="clearCart()"
+                >
+                  Clear Cart
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-secondary col-md-3"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                >
+                  Close
+                </button>
+                <button
+                  type="button"
+                  id="cartPurchaseButton"
+                  class="btn btn-primary col-md-3"
+                  data-bs-dismiss="modal"
+                >
+                  Purchase
+                </button>
+              </div>
+              <!-- </div> -->
             </div>
           </div>
         </div>
       </div>
       <div
         id="main-row"
-        class="col-12 row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4"
+        class="col-12 row row-cols-md-3 row-cols-lg-5 gap-3 justify-content-center centered"
       ></div>
-      <div id="alertDiv" class="sticky-bottom py-5"></div>
+      <div id="alertDiv" class="col-4 sticky-bottom py-5 centered"></div>
     </div>
     <script src="script.js"></script>
   </body>
