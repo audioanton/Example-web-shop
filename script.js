@@ -65,7 +65,7 @@ function getCartProduct(product, amountInCart) {
   minusButton.textContent = "-";
   minusButton.addEventListener("click", function () {
       if (amount.value - 1 >= 0) {
-        decrementProduct(product.id, amount);
+        decrementProduct(product, amount, price);
       }
   });
 
@@ -212,11 +212,11 @@ function incrementProduct(product, amountElement, priceElement) {
   updatePrice(priceElement, amountElement.value, product.price);
 }
 
-function decrementProduct(product_id, amountElement) {
+function decrementProduct(product, amountElement, priceElement) {
   amountElement.value -= 1;
 
   const cart = JSON.parse(localStorage.getItem("cart"));
-  cart[product_id] = amountElement.value;
+  cart[product.id] = amountElement.value;
   localStorage.setItem("cart", JSON.stringify(cart));
   updatePrice(priceElement, amountElement.value, product.price);
 }
@@ -229,8 +229,8 @@ function removeProduct(product_id) {
 }
 
 function updatePrice(priceElement, amount, priceNumber) {
-  const price = (priceNumber * Number(amount)).toFixed(2);
-  priceElement.textContent = `$${price}`;
+  const price = (priceNumber * Number(amount));
+  priceElement.textContent = `$${price.toFixed(2)}`;
   updateTotalPrice();
 }
 
