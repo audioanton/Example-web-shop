@@ -1,10 +1,9 @@
-if (!localStorage.getItem("products")) fetchProducts();
-else {
-  drawProducts(JSON.parse(localStorage.getItem("products")));
-}
+fetchProducts().then((products) => { drawProducts(products) });
+renderCart();
 
-if (localStorage.getItem("cart")) {
-  renderCart(JSON.parse(localStorage.getItem("products")));
+async function fetchProducts() {
+  return await fetch("https://fakestoreapi.com/products")
+    .then((result) => result.json());
 }
 
 function drawProducts(products) {
@@ -12,15 +11,6 @@ function drawProducts(products) {
   products.forEach((product) => {
     row.appendChild(getProductCard(product));
   });
-}
-
-function fetchProducts() {
-  fetch("https://fakestoreapi.com/products")
-    .then((response) => response.json())
-    .then((data) => {
-      localStorage.setItem("products", JSON.stringify(data));
-      drawProducts(data);
-    });
 }
 
 function getCartProduct(product, amountInCart) {
@@ -257,18 +247,23 @@ function updateTotalPrice() {
   document.getElementById("total").textContent = `Total: $${formatted}`;
 }
 
-function renderCart(products) {
+function renderCart() {
   const jsonCart = JSON.parse(localStorage.getItem("cart"));
-
   if (jsonCart) {
     Object.entries(jsonCart).forEach((entry) => {
-      const product = products.find(({ id }) => id === Number(entry[0]));
-      document
-        .getElementById("cart-container")
-        .append(getCartProduct(product, entry[1]));
-    });
+      getSpecificProduct(Number(entry[0]))
+      .then( (product) => {
+          document
+          .getElementById("cart-container")
+          .append(getCartProduct(product, entry[1])); 
+        });
+      });
     updateTotalPrice();
   }
+}
+
+async function getSpecificProduct(id) {
+  return await fetch(`https://fakestoreapi.com/products/${id}`).then((result) => result.json());
 }
 
 function clearCart() {
