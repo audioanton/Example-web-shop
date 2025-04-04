@@ -66,7 +66,6 @@ function getCartProduct(product, amountInCart) {
   minusButton.addEventListener("click", function () {
       if (amount.value - 1 >= 0) {
         decrementProduct(product.id, amount);
-        updatePrice(price, amount.value, product.price);
       }
   });
 
@@ -89,7 +88,6 @@ function getCartProduct(product, amountInCart) {
   removeButton.addEventListener("click", function () {
     removeProduct(product.id);
     row.remove();
-    updateTotalPrice();
   });
 
   priceDiv.append(price, removeButton);
@@ -208,11 +206,9 @@ function addToCart(product) {
 function incrementProduct(product, amountElement, priceElement) {
   amountElement.value = Number(amountElement.value) + 1;
 
-
   const cart = JSON.parse(localStorage.getItem("cart"));
   cart[product.id] = amountElement.value;
   localStorage.setItem("cart", JSON.stringify(cart));
-
   updatePrice(priceElement, amountElement.value, product.price);
 }
 
@@ -222,12 +218,14 @@ function decrementProduct(product_id, amountElement) {
   const cart = JSON.parse(localStorage.getItem("cart"));
   cart[product_id] = amountElement.value;
   localStorage.setItem("cart", JSON.stringify(cart));
+  updatePrice(priceElement, amountElement.value, product.price);
 }
 
 function removeProduct(product_id) {
   const cart = JSON.parse(localStorage.getItem("cart"));
   delete cart[product_id];
   localStorage.setItem("cart", JSON.stringify(cart));
+  updateTotalPrice();
 }
 
 function updatePrice(priceElement, amount, priceNumber) {
